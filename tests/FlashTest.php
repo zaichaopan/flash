@@ -32,12 +32,17 @@ class FlashTest extends TestCase
     /** @test */
     public function it_return_null_when_no_flash()
     {
-        $flash = flash()->get();
+        $this->assertFlash(null, null, null);
+    }
 
-        $this->assertNull($flash);
-        $this->assertNull(flash()->message());
-        $this->assertNull(flash()->type());
-        $this->assertNull(flash()->options());
+    /** @test */
+    public function it_can_check_if_a_flash_is_ready()
+    {
+        $this->assertFalse(flash()->ready());
+
+        flash()->success('hello');
+
+        $this->assertTrue(flash()->ready());
     }
 
     /** @test */
@@ -74,11 +79,23 @@ class FlashTest extends TestCase
         $this->assertFlash('danger', 'hello', $options);
     }
 
+    /** @test */
+    public function it_can_convert_properly_to_json()
+    {
+        flash()->success('hello');
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'message' => flash()->message(),
+                'type' => flash()->type(),
+                'options' => flash()->options()]),
+            json_encode(flash())
+        );
+    }
+
     protected function assertFlash($type, $message, $options = [])
     {
         $this->assertEquals($type, $type = flash()->type());
         $this->assertEquals($message, flash()->message());
         $this->assertEquals($options, flash()->options());
-        $this->assertEquals(compact('type', 'message', 'options'), flash()->get());
     }
 }

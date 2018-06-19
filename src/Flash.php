@@ -4,7 +4,7 @@ namespace Zaichaopan\Flash;
 
 use Illuminate\Session\Store;
 
-class Flash
+class Flash implements \JsonSerializable
 {
     const FLASH = 'flash';
 
@@ -23,17 +23,12 @@ class Flash
         $this->session = $session;
     }
 
-    public function get(): ?array
-    {
-        return $this->session->get(static::FLASH);
-    }
-
     public function type(): ?string
     {
         return $this->getKey('type');
     }
 
-    public function message() : ? string
+    public function message(): ?string
     {
         return $this->getKey('message');
     }
@@ -46,6 +41,11 @@ class Flash
     public function ready(): bool
     {
         return !empty($this->get());
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->get();
     }
 
     public function __call($name, $arguments)
@@ -67,13 +67,18 @@ class Flash
         $this->session->flash(static::FLASH, $this->toArray());
     }
 
+    protected function get(): ?array
+    {
+        return $this->session->get(static::FLASH);
+    }
+
     protected function toArray(): array
     {
         return [
-           'type' => $this->type,
-           'message' => $this->message,
-           'options' => $this->options,
-       ];
+            'type' => $this->type,
+            'message' => $this->message,
+            'options' => $this->options,
+        ];
     }
 
     /**
