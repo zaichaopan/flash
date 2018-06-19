@@ -8,42 +8,19 @@ class Flash
 {
     const FLASH = 'flash';
 
+    const VALID_TYPES = ['info', 'success', 'warning', 'danger', 'error'];
+
     protected $session;
 
-    protected $type = 'info';
+    protected $type;
 
     protected $message;
 
-    protected $options = [];
+    protected $options;
 
     public function __construct(Store $session)
     {
         $this->session = $session;
-    }
-
-    public function info(string $message, array $options = []): void
-    {
-        $this->setFlash('info', $message, $options);
-    }
-
-    public function success(string $message, array $options = []): void
-    {
-        $this->setFlash('success', $message, $options);
-    }
-
-    public function warning(string $message, array $options = []): void
-    {
-        $this->setFlash('warning', $message, $options);
-    }
-
-    public function error(string $message, array $options = []): void
-    {
-        $this->setFlash('error', $message, $options);
-    }
-
-    public function danger(string $message, array $options = []): void
-    {
-        $this->setFlash('danger', $message, $options);
     }
 
     public function get(): ?array
@@ -51,14 +28,14 @@ class Flash
         return $this->session->get(static::FLASH);
     }
 
-    public function message(): ?string
-    {
-        return $this->getKey('message');
-    }
-
     public function type(): ?string
     {
         return $this->getKey('type');
+    }
+
+    public function message() : ? string
+    {
+        return $this->getKey('message');
     }
 
     public function options(): ?array
@@ -69,6 +46,17 @@ class Flash
     public function ready(): bool
     {
         return !empty($this->get());
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (in_array($name, static::VALID_TYPES)) {
+            return $this->setFlash($name, ...$arguments);
+        }
+
+        throw new \BadMethodCallException(
+            "Method [$name] does not exist on Flash."
+        );
     }
 
     protected function setFlash(string $type, $message, array $options = []): void

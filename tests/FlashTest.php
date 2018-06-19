@@ -46,7 +46,7 @@ class FlashTest extends TestCase
         flash()->info($message = 'hello');
         $this->assertFlash('info', $message, []);
 
-        flash()->info('hello', $options = ['foo' => 'bar']);
+        flash()->info('hello', $options = ['foo' => 'bar', 'bar' => 'baz']);
         $this->assertFlash('info', 'hello', $options);
 
         flash()->success('hello');
