@@ -23,27 +23,27 @@ class Flash
 
     public function info(string $message, array $options = []): void
     {
-        $this->setNotify('info', $message, $options);
+        $this->setFlash('info', $message, $options);
     }
 
     public function success(string $message, array $options = []): void
     {
-        $this->setNotify('success', $message, $options);
+        $this->setFlash('success', $message, $options);
     }
 
     public function warning(string $message, array $options = []): void
     {
-        $this->setNotify('warning', $message, $options);
+        $this->setFlash('warning', $message, $options);
     }
 
     public function error(string $message, array $options = []): void
     {
-        $this->setNotify('error', $message, $options);
+        $this->setFlash('error', $message, $options);
     }
 
     public function danger(string $message, array $options = []): void
     {
-        $this->setNotify('danger', $message, $options);
+        $this->setFlash('danger', $message, $options);
     }
 
     public function get(): ?array
@@ -71,7 +71,7 @@ class Flash
         return !empty($this->get());
     }
 
-    protected function setNotify(string $type, $message, array $options = []): void
+    protected function setFlash(string $type, $message, array $options = []): void
     {
         $this->type = $type;
         $this->message = $message;
