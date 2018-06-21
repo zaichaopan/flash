@@ -13,6 +13,7 @@
             "email": "zaichaopan@gmail.com"
         }
     ],
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Zaichaopan\\Flash\\": "src"
@@ -41,6 +42,5 @@
                 "Zaichaopan\\Flash\\FlashServiceProvider"
             ]
         }
-    },
-    "minimum-stability": "stable"
+    }
 }
